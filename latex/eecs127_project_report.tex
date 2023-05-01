@@ -1,0 +1,63 @@
+\documentclass{amsart}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\usepackage{biblatex}
+\addbibresource{references.bib}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{float}
+
+\usepackage{graphicx}
+\usepackage{hyperref} 
+
+% Feel free to add any of your own macros, etc here
+
+\title{EECS 127 Project}  % Feel free to make more descriptive
+\author{Author 1}
+\author{Author 2}  % Feel free to delete if unnecessary.
+\author{Author 3}  % Feel free to delete if unnecessary.
+
+\begin{document}
+
+\maketitle
+
+% May want \tableofcontents if you submit a long report with sections
+% \section{Section 1}
+
+Report goes here.
+
+\section{Introduction}
+
+Feel free to add more sections/subsections as necessary.
+
+\section{Methodology}
+
+Here is a way to add tables:
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lll}
+               & Test Column 1 & Test Column 2 \\
+    Test Row 1 & $1$           & $2$           \\
+    Test Row 2 & $3$           & $4$          
+    \end{tabular}
+\end{table}
+You can use this \href{https://www.tablesgenerator.com/}{website} to generate tables.
+
+To add figures, you can read this \href{https://www.overleaf.com/learn/latex/Inserting_Images}{short guide} by Overleaf.
+
+To add inline equations, you can do $f(x) = y$. To add line-broken equations, you can do
+\[f(x) = y.\]
+To add numbered equations, you can do
+\begin{equation}
+    f(x) = y.
+\end{equation}
+To add multiline equations, you can look up the \texttt{align} environment (and its unnumbered variant \texttt{align*}).
+
+\section{Results}
+
+\printbibliography
+
+\end{document}
