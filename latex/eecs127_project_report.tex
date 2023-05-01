@@ -13,11 +13,14 @@
 \usepackage{graphicx}
 \usepackage{hyperref} 
 \usepackage{enumitem}
+\usepackage[nodisplayskipstretch]{setspace}
 
 \setlength{\parskip}{\baselineskip}
 \setlist{parsep=0.5em, topsep=0.5em, itemsep=0.5em} 
 
 % Feel free to add any of your own macros, etc here
+\DeclareMathOperator*{\argmax}{arg\!\max}
+\DeclareMathOperator*{\argmin}{arg\!\min}
 
 \title{EECS 127 - Project: Adversarial Machine Learning}  % Feel free to make more descriptive
 \author{Author 1}
@@ -50,10 +53,38 @@
 \subsection{Fast Gradient Signed Method}
 
 \begin{align*}
-    \vec{a}
+    \vec{x}_{FGSM} &= \vec{x} + \epsilon \cdot sgn(\nabla_{\vec{x}} L(f_{\theta}(\vec{x}), \vec{y}_{true}))
 \end{align*}
 
-what
+\begin{enumerate}[label=(\alph*)]
+
+\item first order approximation
+\begin{alignat*}{3}
+    \vec{x}_{FGSM} &= \argmax_{\vec{x'}} & \quad & L(f_{\theta}(\vec{x}), \vec{y}_{true}) + (\nabla_{\vec{x}} L(f_{\theta}(\vec{x}), \vec{y}_{true}))^T \vec{x'} \\
+                   & \qquad \textrm{s.t.} & \quad & \| \vec{x} - \vec{x'} \|_{\infty} \le \epsilon \\
+                   &= \argmax_{\vec{v}} & \quad & L(f_{\theta}(\vec{x}), \vec{y}_{true}) + (\nabla_{\vec{x}} L(f_{\theta}(\vec{x}), \vec{y}_{true}))^T (\vec{x} + \epsilon \cdot \vec{v}) \\
+                   & \qquad \textrm{s.t.} & \quad & \| \vec{x} - \vec{x} - \epsilon \cdot \vec{v} \|_{\infty} \le \epsilon \\
+                   &= \argmax_{\vec{v}} & \quad & \epsilon \cdot (\nabla_{\vec{x}} L(f_{\theta}(\vec{x}), \vec{y}_{true}))^T \vec{v} \\
+                   & \qquad \textrm{s.t.} & \quad & \| \vec{v} \|_{\infty} \le 1 \\ 
+                   &= & & \epsilon \cdot \| \nabla_{\vec{x}} L(f_{\theta}(\vec{x}), \vec{y}_{true}) \|_{1} \\
+                   &= & & \epsilon \cdot  sgn(\nabla_{\vec{x}} L(f_{\theta}(\vec{x}), \vec{y}_{true}))
+\end{alignat*}
+
+\item ball constraint
+\begin{alignat*}{3}
+    \vec{x}_{ball} &= \argmax_{\vec{x'}} & \quad & L(f_{\theta}(\vec{x}), \vec{y}_{true}) + (\nabla_{\vec{x}} L(f_{\theta}(\vec{x}), \vec{y}_{true}))^T \vec{x'} \\
+                   & \qquad \textrm{s.t.} & \quad & \| \vec{x} - \vec{x'} \|_{2} \le \epsilon \\
+                   &= \argmax_{\vec{v}} & \quad & L(f_{\theta}(\vec{x}), \vec{y}_{true}) + (\nabla_{\vec{x}} L(f_{\theta}(\vec{x}), \vec{y}_{true}))^T (\vec{x} + \epsilon \cdot \vec{v}) \\
+                   & \qquad \textrm{s.t.} & \quad & \| \vec{x} - \vec{x} - \epsilon \cdot \vec{v} \|_{2} \le \epsilon \\
+                   &= \argmax_{\vec{v}} & \quad & \epsilon \cdot (\nabla_{\vec{x}} L(f_{\theta}(\vec{x}), \vec{y}_{true}))^T \vec{v} \\
+                   & \qquad \textrm{s.t.} & \quad & \| \vec{v} \|_{2} \le 1 \\ 
+                   &= & & \epsilon \cdot \| \nabla_{\vec{x}} L(f_{\theta}(\vec{x}), \vec{y}_{true}) \|_{2} \\
+\end{alignat*}
+
+
+    
+\end{enumerate}
+
 
 \pagebreak
 
