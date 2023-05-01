@@ -12,10 +12,15 @@
 
 \usepackage{graphicx}
 \usepackage{hyperref} 
+\usepackage{enumitem}
+
+\setlength{\parskip}{\baselineskip}
+\setlist{parsep=0.5em, topsep=0.5em, itemsep=0.5em} 
 
 % Feel free to add any of your own macros, etc here
 
 \title{EECS 127 - Project: Adversarial Machine Learning}  % Feel free to make more descriptive
+
 \author{Author 1}
 \author{Author 2}  % Feel free to delete if unnecessary.
 \author{Author 3}  % Feel free to delete if unnecessary.
@@ -31,7 +36,57 @@
 
 \section{Literature Review}
 
+\begin{enumerate}[label=(\alph*)]
 
+    \item "Towards Evaluating the Robustness of Neural Networks" by Carlini and Wagner
+
+    Defensive distillation is an approach to increase the robustness of a neural network. A modification
+    made to a normal neural network is including a temperature parameter in the softmax function, which 
+    influences the maximum of the probability distribution. Defensive distillation occurs in 4 steps: 
+
+    \begin{enumerate}[label=\arabic*.]
+        \item Train a teacher network with some temperature value T.
+
+        \item Compute soft labels by predicting the labels of training set using the teacher network.
+
+        \item Train a distilled network using the soft labels and the same temperature value T.
+
+        \item Run inference with the distilled network and temperature value of 1.
+    \end{enumerate}
+
+    Using box constrained L-BFGS, we can construct adversarial examples by finding a different image 
+    x' that is similar to the original image x according to $L_2$ or Euclidean distance, but is
+    classified as a different label by the neural network. In order to deal with the non-linear
+    constraint where $C(x + \delta) = t$ (ie. classification of adversarial example is a different
+    label), we can push the constraint into the objective function by finding a function $f$
+    such that $f(x + \delta) \le 0$, and minimizing the new objective. 
+
+    Moreover, we parameterize $\delta_i = \frac{1}{2} (tanh(w_i) + 1) - x_i$ in order to comply with 
+    the box constraint $0 \le x_i + \delta_i \le 1$. For the $L_2$ attack, we consider the following 
+    optimization problem:
+
+    $\min \| \frac{1}{2} (tanh(w) + 1) - x\| + c \cdot f(\frac{1}{2} (tanh(w) + 1))$,
+
+    $f(x') = \max(\max\{Z(x')_i : i \neq t\} - Z(x')_t, -\kappa)$.
+
+    The parameter $\kappa$ is used to find an adversarial example that is classified as label t
+    with high confidence.
+
+    \item "Provable defenses against adversarial examples via the convex outer adversarial polytope" by Wong
+    and Kolter
+
+    The adversarial polytope, $Z_{\epsilon}(x)$, is the "set of all final-layer activations 
+    attainable by pertubing x by some $\Delta$ with $l_{\infty}$ norm bounded by $\epsilon$." This 
+    is a non-convex set since it can be expressed as an integer program (which is non-convex). 
+    We can relax this optimization problem by considering the "convex outer adversarial polytope," 
+    which involves a linear relaxation of the ReLU activation function. Even though the feasible set
+    is now convex (linear constraints and linear equalities), we need to solve a LP for each target 
+    class, which is highly inefficient. Instead, in considering the dual problem, we can find a 
+    lower bound for this LP, and the dual problem also gives us robust error bounds and guarantees,
+    assuming the example is classified correctly (there does not exist an adversarial example that 
+    exceeds this upper bound in terms of $l_{\infty}$ difference with the true example).
+
+\end{enumerate}
 
 \pagebreak
 
