@@ -1,4 +1,5 @@
-\documentclass{amsart}
+% \documentclass{amsart}
+\documentclass{article}
 
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -13,97 +14,75 @@
 \usepackage{graphicx}
 \usepackage{hyperref} 
 \usepackage{enumitem}
+\usepackage{setspace}
 
-\setlength{\parskip}{\baselineskip}
-\setlist{parsep=0.5em, topsep=0.5em, itemsep=0.5em} 
+% \setlength{\parskip}{\baselineskip}
+% \setlist{parsep=0.5em, topsep=0.5em, itemsep=0.5em} 
+\doublespacing
 
 % Feel free to add any of your own macros, etc here
 
-\title{EECS 127 - Project: Adversarial Machine Learning}  % Feel free to make more descriptive
-\author{Author 1}
-\author{Author 2}  % Feel free to delete if unnecessary.
-\author{Author 3}  % Feel free to delete if unnecessary.
+\title{\vspace{5cm} 
+    \textbf{Adversarial Machine Learning} \\
+    \vspace{0.25cm}
+    \Large{EECS 127 Project}
+}  % Feel free to make more descriptive
+
+\author{Neel Kandlikar, Amos You, Henric Zhang}
+\date{May 4, 2023}
 
 \begin{document}
 
 \maketitle
 
+\pagebreak
+
 % May want \tableofcontents if you submit a long report with sections
-\tableofcontents
+{
+  \hypersetup{linkcolor=black}
+  \tableofcontents
+}
 
 \pagebreak
 
-\section{Literature Review}
+\section{Introduction}
+
+In recent years, neural networks have proven to be highly effective at various machine learning tasks,
+whether it be image classification or speech recognition. Neural networks have achieved state of 
+art results for various dataset benchmarks (eg. MNIST, CIFAR, WINE, etc), yet a major issue regarding
+the performance of these neural networks remains: susceptibility to adversarial examples. For some 
+input $x$ and target label $l$, it is often possible to find a similar input $x'$ such that the 
+classifier misclassifies the example as some other label. As more artificial intelligence systems
+are being introduced into society and we rely on these deep learning models that are integrated 
+ithin these systems, questions regarding the safety and security of these systems are important to
+discuss. In security conscious applications such as self driving cars or facial recognition for
+mobile devices, ill-intentioned attackers can create adversarial examples that lead to undesired
+outcomes, such as steering the car incorrectly or unlocking the phone.
+
+In this paper, we evaluate robustness properties for neural networks. We uncover how we generate 
+adversarial examples, what constitutes "robustness" for a neural network, and how robustness 
+changes under new conditions for the width and depth of a neural network.
+
+\section{Robustness Properties for Neural Networks}
+
+\subsection{Generating Adversarial Examples}
+
+To generate adversarial examples, 
+
+\subsection{Baseline}
+
+\section{Wider, Deeper Networks}
+
+
+\subsection{Number of Nodes}
+
+\subsection{Number of Layers}
+
+
+\section{Conclusion}
 
 
 
-\pagebreak
-
-\section{Deep Neural Network Classifiers}
-
-
-
-\pagebreak
-
-\section{Finding Adversarial Examples}
-
-
-
-\pagebreak
-
-\section{Convex Relaxation of the Adversarial Optimization}
-
-
-
-\pagebreak
-
-\section{Fenchel Conjugates}
-
-
-
-\pagebreak
-
-\section{Using Lagrangian Duality}
-
-
-
-\pagebreak
-
-\section{Finding the Fenchel Conjugates}
-
-
-
-\pagebreak
-
-\section{The Dual Network}
-
-
-
-\pagebreak
-
-\section{Finding the Bounds}
-
-
-
-\pagebreak
-
-\section{A certificate for robustness}
-
-
-
-\pagebreak
-
-\section{Training a robust classifier}
-
-
-
-\pagebreak
-
-\section{The Fenchel Conjugate of \texorpdfstring{$1_{Z_j}$}{1\_Z\_j}}
-
-
-
-\pagebreak
 
 \section{References}
 
