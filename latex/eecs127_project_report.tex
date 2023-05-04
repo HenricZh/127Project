@@ -15,6 +15,9 @@
 \usepackage{hyperref} 
 \usepackage{enumitem}
 \usepackage{setspace}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 
 % \setlength{\parskip}{\baselineskip}
 % \setlist{parsep=0.5em, topsep=0.5em, itemsep=0.5em} 
@@ -67,16 +70,77 @@ changes under new conditions for the width and depth of a neural network.
 
 \subsection{Generating Adversarial Examples}
 
-To generate adversarial examples, 
+To generate adversarial examples, we employ the Fast Gradient Signed Method (FGSM), which is an 
+efficient algorithm of perturbing inputs. This algorithm takes an input image, and perturbs the
+image in the direction of the sign of the gradient with respect to the classifier's loss. In 
+pseudocode, this is represented as:
+
+\begin{algorithm}
+    \caption{Fast Signed Gradient Method (FGSM)}
+\begin{algorithmic}
+    \Require $x, l$
+    \Require $\epsilon > 0$
+    \State $x' \gets x - \epsilon \cdot sign(\nabla loss_{F, l}(x))$
+\end{algorithmic}
+\end{algorithm}
+
+Unlike other algorithms, Fast Gradient Signed Method is fast due to the fact that the algorithm
+only requires the calculation of the gradient, whereas other methods are formulated as a 
+minimization problem with convex relaxations and require some sort of line search to find the
+"optimal" way to perturb the image. Notice that $\epsilon$ is a hyperparameter here; increasing
+$\epsilon$ yields a greater perturbation, lowering $\epsilon$ leads to a smaller perturbation.
 
 \subsection{Baseline}
+
+Our baseline model is a 2 layer neural network, with the hidden layer having 256 nodes, an output
+layer having 10 nodes, and ReLU activations between layers. In other words, the dimensionality of 
+the layers progresses from 784, to 256, to 10. We see that for adversarial examples, ie. images
+perturbed with size $\epsilon$, as given by the Fast Gradient Sign Method, all of these confidence
+differences are non-negative. We know that a 0 confidence difference indicates that the model's
+confidence in the true class matches class j, and so j must be the true class. For positive
+confidence differences, it would indicate that the model is more confident in the true class
+than class j, and so for j that is not the true class, we confirm that the neural network is robust.
+Had the values been negative, the model would have greater confidence in class j than the true
+class, which means that the adversarial example has fooled the neural network. \\
+
+\begin{tabular}{|l|l|}
+\hline
+Class & Confidence in true class - class j \\ \hline
+0     & 7.00089168548584                   \\ \hline
+1     & 11.432679176330566                 \\ \hline
+2     & 1.600733995437622                  \\ \hline
+3     & 2.1836435794830322                 \\ \hline
+4     & 18.466800689697266                 \\ \hline
+5     & 6.655491828918457                  \\ \hline
+6     & 14.839714050292969                 \\ \hline
+8     & 6.529881477355957                  \\ \hline
+9     & 5.659580230712891                  \\ \hline
+\end{tabular} \\
+
+Here, we have $\epsilon = 0.5$. We observe that all the confidence differences are non-negative,
+which proves that our model is robust to perturbations of size $0.5$.
+
 
 \section{Wider, Deeper Networks}
 
 
 \subsection{Number of Nodes}
 
+Neural networks have a width described by the number of nodes in a particular hidden layer. The 
+baseline neural network architecture has one hidden layer and only 256 nodes. We modify this
+architecture by increasing the number of nodes from 256 to 1024. In doing so, the formulations
+of the optimization problems have remained unchanged for the most part, but the aspect that did 
+change was the number of nodes in the hidden layer. Upon initial glance, I noticed that the 
+classification accuracy for this model is slightly higher than the baseline model. This is likely
+due to the fact that this neural network was trained on more nodes, where there is a greater
+flexibility for the neural network to learn the task at hand. 
+
+
+
 \subsection{Number of Layers}
+
+
+
 
 
 \section{Conclusion}
