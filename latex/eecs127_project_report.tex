@@ -18,6 +18,7 @@
 \usepackage{booktabs}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{multirow}
 
 % \setlength{\parskip}{\baselineskip}
 % \setlist{parsep=0.5em, topsep=0.5em, itemsep=0.5em} 
@@ -103,6 +104,8 @@ than class j, and so for j that is not the true class, we confirm that the neura
 Had the values been negative, the model would have greater confidence in class j than the true
 class, which means that the adversarial example has fooled the neural network. \\
 
+\begin{table}[h]
+\centering
 \begin{tabular}{|l|l|}
 \hline
 Class & Confidence in true class - class j \\ \hline
@@ -115,7 +118,9 @@ Class & Confidence in true class - class j \\ \hline
 6     & 14.839714050292969                 \\ \hline
 8     & 6.529881477355957                  \\ \hline
 9     & 5.659580230712891                  \\ \hline
-\end{tabular} \\
+\end{tabular}
+\caption{Confidence Differences for baseline network}
+\end{table}
 
 Here, we have $\epsilon = 0.5$. We observe that all the confidence differences are non-negative,
 which proves that our model is robust to perturbations of size $0.5$.
@@ -127,15 +132,55 @@ which proves that our model is robust to perturbations of size $0.5$.
 \subsection{Number of Nodes}
 
 Neural networks have a width described by the number of nodes in a particular hidden layer. The 
-baseline neural network architecture has one hidden layer and only 256 nodes. We modify this
+baseline neural network architecture has only one hidden layer with 256 nodes. We modify this
 architecture by increasing the number of nodes from 256 to 1024. In doing so, the formulations
 of the optimization problems have remained unchanged for the most part, but the aspect that did 
-change was the number of nodes in the hidden layer. Upon initial glance, I noticed that the 
-classification accuracy for this model is slightly higher than the baseline model. This is likely
-due to the fact that this neural network was trained on more nodes, where there is a greater
-flexibility for the neural network to learn the task at hand. 
+change was the number of nodes in the hidden layer. 
 
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+network                       & epsilon               & accuracy           & primal & robust train \\ \hline
+\multirow{2}{*}{baseline}     & \multirow{2}{*}{0.05} & accuracy on normal & 0.971  & 0.9532       \\ \cline{3-5} 
+                              &                       & accuracy on fgsm   & 0.931  & 0.8948       \\ \hline
+\multirow{2}{*}{wide network} & \multirow{2}{*}{0.05} & accuracy on normal & 0.9722 & 0.9544       \\ \cline{3-5} 
+                              &                       & accuracy on fgsm   & 0.9365 & 0.9012       \\ \hline
+\end{tabular}
+\caption{Accuracy for baseline and wide networks}
+\end{table}
 
+Upon initial glance, we noticed that the classification accuracy for this model is slightly 
+higher than the baseline model, achieving 0.9722 compared to 0.971. This is likely due to the fact 
+that this neural network was trained on more nodes, where there is a greater flexibility for the 
+neural network to learn the task at hand and be more expressive in determining predictions. After perturbing the images via the Fast Gradient Signed Method, the test accuracy 
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+network                       & $\epsilon$               & class & primal      & dual        & robust train \\ \hline
+\multirow{9}{*}{baseline}     & \multirow{9}{*}{0.05} & 0     & 20.21192551 & 8.241117477 & 12.31344986  \\ \cline{3-6} 
+                              &                       & 1     & 20.19167709 & 11.76900101 & 14.90980721  \\ \cline{3-6} 
+                              &                       & 2     & 9.065196037 & 3.281088829 & 7.424779415  \\ \cline{3-6} 
+                              &                       & 3     & 9.794664383 & 4.855121136 & 8.22224617   \\ \cline{3-6} 
+                              &                       & 4     & 29.35568428 & 17.20711327 & 20.98391914  \\ \cline{3-6} 
+                              &                       & 5     & 20.30759811 & 9.340673447 & 13.71678829  \\ \cline{3-6} 
+                              &                       & 6     & 35.5247345  & 23.93348312 & 28.84642029  \\ \cline{3-6} 
+                              &                       & 8     & 19.39855576 & 9.744720459 & 13.7982502   \\ \cline{3-6} 
+                              &                       & 9     & 12.68011379 & 9.952120781 & 12.80408287  \\ \hline
+\multirow{9}{*}{wide network} & \multirow{9}{*}{0.05} & 0     & 10.85395241 & 2.003206253 & 17.11705399  \\ \cline{3-6} 
+                              &                       & 1     & 13.78579617 & 6.752723217 & 17.49331856  \\ \cline{3-6} 
+                              &                       & 2     & 8.221461296 & 1.98862505  & 12.20595074  \\ \cline{3-6} 
+                              &                       & 3     & 7.878949165 & 1.389311314 & 7.090931416  \\ \cline{3-6} 
+                              &                       & 4     & 18.53999329 & 7.469589233 & 24.26895714  \\ \cline{3-6} 
+                              &                       & 5     & 13.85598087 & 4.485163212 & 13.78519058  \\ \cline{3-6} 
+                              &                       & 6     & 30.81690979 & 17.43231964 & 29.81845856  \\ \cline{3-6} 
+                              &                       & 8     & 12.51810741 & 3.307539463 & 14.2676239   \\ \cline{3-6} 
+                              &                       & 9     & 9.359952927 & 1.062012672 & 9.821380615  \\ \hline
+\end{tabular}
+\caption{Comparison of confidence differences for various networks}
+\end{table}
 
 \subsection{Number of Layers}
 
@@ -148,12 +193,9 @@ flexibility for the neural network to learn the task at hand.
 
 
 
-\section{References}
+\section{Appendix}
 
 
 
-\pagebreak
-
-\printbibliography
 
 \end{document}
