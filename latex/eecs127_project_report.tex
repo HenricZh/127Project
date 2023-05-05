@@ -126,8 +126,7 @@ Here, we have $\epsilon = 0.5$. We observe that all the confidence differences a
 which proves that our model is robust to perturbations of size $0.5$.
 
 
-\section{Wider, Deeper Networks}
-
+\section{Wider and Deeper Networks}
 
 \subsection{Number of Nodes}
 
@@ -153,7 +152,15 @@ network                       & epsilon               & accuracy           & pri
 Upon initial glance, we noticed that the classification accuracy for this model is slightly 
 higher than the baseline model, achieving 0.9722 compared to 0.971. This is likely due to the fact 
 that this neural network was trained on more nodes, where there is a greater flexibility for the 
-neural network to learn the task at hand and be more expressive in determining predictions. After perturbing the images via the Fast Gradient Signed Method, the test accuracy 
+neural network to learn the task at hand and be more expressive in determining predictions. After 
+perturbing the images via the Fast Gradient Signed Method, the test accuracy has decreased, as 
+expected. The unique detail here is that the test accuracy for the robustly trained wide network is
+higher than that for the robustly trained baseline network, yielding 0.9012 and 0.8948 respectively. 
+In other words, we see that the wider hidden layer led to more robustness, since the lower bound for 
+the accuracy of the wide network is higher than the lower bound for the accuracy of the baseline 
+network, when we perturb images up to size $\epsilon = 0.05$. Although we only robustly trained on 
+images perturbed by this size $\epsilon = 0.05$, it is fair to assume that the robustness quality 
+holds as we intensify the perturbations.
 
 \begin{table}[h]
 \centering
@@ -182,20 +189,49 @@ network                       & $\epsilon$               & class & primal      &
 \caption{Comparison of confidence differences for various networks}
 \end{table}
 
+Furthermore, we can again confirm the robustness for the wide neural network through the comparison 
+of confidence differences. The adversarial example at hand is a digit 7 perturbed with size $\epsilon
+= 0.05$, and we examine the confidence difference between the true class (7) and other target classes.
+Both the baseline network and the wide network achieve non-negative confidence differences for all
+classes other than 7, which suggests that these neural networks are more confident that the true 
+label of the adversarial example is a 7, moreso than when the neural network classifies the example 
+as other classes. Meeting this non-negative threshold is a good indicator for robustness, and we see
+that both the baseline network and the wide network meet this criterion.
+
 \subsection{Number of Layers}
 
+Beyond changing the width of a neural network, a way to fundamentally change the architecture is by
+including additional hidden layers to the neural network. Recall that the baseline architecture had
+only one hidden layer with 256 nodes. We built a configuration involving a hidden layer with 1024 
+nodes (similar to the previous section), and added in another hidden layer with 256 nodes. This
+produced a 3 layer neural network, with layers of dimension 1024, 256, and then 10. 
 
+Configuring the architecture in this manner required a slight modification to the optimization 
+problems. The maximum of the Lagrangian (function $g$) will have an additional term of the convex 
+relaxation for the ReLU activation after the second layer. Moreover, we need to modify the ReLU 
+bounds $\vec{u}$ and $\vec{l}$, in order to compute this function $g$.
 
+Fulfilling this changes, we will be able to robustly train the deep neural network, and assess the
+classification accuracy against the adversarial examples. Due to hardware issues, lack of compute, 
+and time constraints, we were not able to fully train this deep neural network (8 hour training 
+time for wide neural network). However, we can infer some outcomes based on previous results.
 
+In general, including additional hidden layers to a neural network leads to a more accurate
+classifier since the additional weights and biases allow for more expressiveness in modeling 
+predictions. The expressive nature of a deeper neural network should allow the neural network to
+learn from adversarial examples as well, and we expect a robustly trained deep neural network to be
+more resilient to adversarial examples, achieving a higher lower bound when assessing classification
+accuracy of images perturbed via Fast Gradient Signed Method. Our intuition tells us that if a
+wider neural network can achieve some lower bound on the test accuracy when robustly trained, a
+deeper neural network that has the same wide layer and additional layers should achieve the same
+lower bound or better.
 
 \section{Conclusion}
 
-
-
-
-\section{Appendix}
-
-
-
+Although neural networks appear to have blind spots to adversarial examples, it is promising to see
+how robustly trained neural networks can combat these concerns and arrive at improved predictions. 
+Not to mention, we only observed how neural networks respond to perturbations initiated by the Fast
+Gradient Signed Method. Further research can explore how wider and deeper neural networks respond
+to more precise adversarial attacks, and observe how robustness is guaranteed in those settings.
 
 \end{document}
